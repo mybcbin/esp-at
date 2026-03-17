@@ -2,7 +2,7 @@
 # Do NOT edit unless you know exactly what you are doing
 
 CONFIG_IDF_TARGET_ESP32C3=y
-
+CONFIG_AT_UART_DEFAULT_FLOW_CONTROL=2
 # Serial flasher config
 CONFIG_ESPTOOLPY_FLASHMODE_DIO=y
 CONFIG_ESPTOOLPY_FLASHFREQ_40M=y
