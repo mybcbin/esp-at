@@ -32,6 +32,8 @@ static const char *TAG = "at-uart";
 uint8_t g_at_cmd_port = UART_NUM_1;
 at_uart_port_pins_t g_uart_port_pin;
 
+extern uint8_t ready_status;
+
 static int32_t at_uart_write_data(uint8_t *data, int32_t len)
 {
     uint32_t length = 0;
@@ -272,6 +274,15 @@ static void at_uart_restart_before_cb(void)
     at_disable_uart_pins();
 }
 
+static int32_t at_uart_active_write_data_before_cb(uint8_t *data, int32_t len)
+{
+    if (ready_status == 1) {
+        return len;    
+    } else {
+        return 0;
+    }
+}
+
 void at_interface_init(void)
 {
     // init interface driver
@@ -293,7 +304,7 @@ void at_interface_init(void)
         .pre_wakeup_callback = NULL,
         .pre_deepsleep_callback = at_uart_deepsleep_before_cb,
         .pre_restart_callback = at_uart_restart_before_cb,
-        .pre_active_write_data_callback = NULL,
+        .pre_active_write_data_callback = at_uart_active_write_data_before_cb,
     };
     at_interface_hooks(&uart_hooks);
 }
