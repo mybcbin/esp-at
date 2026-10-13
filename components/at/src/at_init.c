@@ -31,6 +31,7 @@
 
 // global variables
 const char *g_at_mfg_nvs_name = "mfg_nvs";
+uint8_t ready_status = 0;
 
 // static variables
 static const char *s_ready_str = "\r\nready\r\n";
@@ -321,6 +322,7 @@ static void at_nvs_flash_init_partition(void)
 
 static void esp_at_ready(void)
 {
+    ready_status = 1;
     esp_at_port_active_write_data((uint8_t *)s_ready_str, strlen(s_ready_str));
 }
 
