@@ -140,6 +140,11 @@ __attribute__((weak)) void esp_at_ready_before(void)
     esp_wifi_set_mode(WIFI_MODE_STA); 
 #ifdef CONFIG_AT_SELF_COMMAND_SUPPORT
     at_exe_cmd("ATE0\r\n", "OK", 1000);
+    at_exe_cmd("AT+BLEINIT=2\r\n", "OK", 1000);
+    at_exe_cmd("AT+BLEGATTSSRVCRE\r\n", "OK", 1000);
+    at_exe_cmd("AT+BLEGATTSSRVSTART\r\n", "OK", 1000);
+    at_exe_cmd("AT+BLEADDR?", "OK", 1000);
+    at_exe_cmd("AT+CIPSTAMAC?", "OK", 1000);
     //at_exe_cmd("AT+GMR\r\n", "OK", 1000);
     //at_exe_cmd("AT+SYSRAM?\r\n", "OK", 1000);
 #endif
