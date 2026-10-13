@@ -138,6 +138,7 @@ static void at_bt_controller_mem_release(void)
 __attribute__((weak)) void esp_at_ready_before(void)
 {
     esp_wifi_set_mode(WIFI_MODE_STA);
+    at_exe_cmd("ATE0\r\n", "OK", 1000);
 #ifdef CONFIG_AT_SELF_COMMAND_SUPPORT
     at_exe_cmd("AT+GMR\r\n", "OK", 1000);
     at_exe_cmd("AT+SYSRAM?\r\n", "OK", 1000);
