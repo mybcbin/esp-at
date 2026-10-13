@@ -388,7 +388,7 @@ void esp_at_init(void)
 #endif
 
     // initialize the interface for esp-at and mcu communication
-    at_interface_init();
+    //at_interface_init();
 
     // initialize the module configuration based on the parameters in the manufacturing partition
     at_module_config_init();
@@ -423,6 +423,7 @@ void esp_at_init(void)
 #endif
 
     // once the interface is started, the AT command can be received and processed
+    at_interface_init();
     at_interface_start();
 
     esp_at_ready();
