@@ -143,8 +143,8 @@ __attribute__((weak)) void esp_at_ready_before(void)
     at_exe_cmd("AT+BLEINIT=2\r\n", "OK", 1000);
     at_exe_cmd("AT+BLEGATTSSRVCRE\r\n", "OK", 1000);
     at_exe_cmd("AT+BLEGATTSSRVSTART\r\n", "OK", 1000);
-    at_exe_cmd("AT+BLEADDR?", "OK", 1000);
-    at_exe_cmd("AT+CIPSTAMAC?", "OK", 1000);
+    at_exe_cmd("AT+BLEADDR?\r\n", "OK", 1000);
+    at_exe_cmd("AT+CIPSTAMAC?\r\n", "OK", 1000);
     //at_exe_cmd("AT+GMR\r\n", "OK", 1000);
     //at_exe_cmd("AT+SYSRAM?\r\n", "OK", 1000);
 #endif
