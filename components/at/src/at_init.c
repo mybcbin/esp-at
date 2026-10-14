@@ -31,7 +31,9 @@
 
 // global variables
 const char *g_at_mfg_nvs_name = "mfg_nvs";
-uint8_t ready_status = 0;
+uint8_t g_ready_status = 0;
+char g_ble_mac[] = "+BLEADDR:\"11:22:33:44:55:66\"\r\n";
+char g_sta_mac[] = "+CIPSTAMAC:\"11:22:33:44:55:66\"\r\n";
 
 // static variables
 static const char *s_ready_str = "\r\nready\r\n";
@@ -144,6 +146,8 @@ __attribute__((weak)) void esp_at_ready_before(void)
     at_exe_cmd("AT+BLEINIT=2\r\n", "OK", 1000);
     at_exe_cmd("AT+BLEGATTSSRVCRE\r\n", "OK", 1000);
     at_exe_cmd("AT+BLEGATTSSRVSTART\r\n", "OK", 1000);
+    at_exe_cmd("AT+BLEADDR?\r\n", "OK", 1000);
+    at_exe_cmd("AT+CIPSTAMAC?\r\n", "OK", 1000);
     //at_exe_cmd("AT+GMR\r\n", "OK", 1000);
     //at_exe_cmd("AT+SYSRAM?\r\n", "OK", 1000);
 #endif
@@ -320,10 +324,10 @@ static void at_nvs_flash_init_partition(void)
 
 static void esp_at_ready(void)
 {
-    ready_status = 1;
-    at_exe_cmd("AT+BLEADDR?\r\n", "OK", 1000);
-    at_exe_cmd("AT+CIPSTAMAC?\r\n", "OK", 1000);
+    g_ready_status = 1;
     esp_at_port_active_write_data((uint8_t *)s_ready_str, strlen(s_ready_str));
+    esp_at_port_active_write_data((uint8_t *)g_ble_mac, strlen(g_ble_mac));
+    esp_at_port_active_write_data((uint8_t *)g_sta_mac, strlen(g_sta_mac)); 
 }
 
 static IRAM_ATTR void at_alloc_failed_cb(size_t requested_size, uint32_t caps, const char *function_name)

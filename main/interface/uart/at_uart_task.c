@@ -32,12 +32,24 @@ static const char *TAG = "at-uart";
 uint8_t g_at_cmd_port = UART_NUM_1;
 at_uart_port_pins_t g_uart_port_pin;
 
-extern uint8_t ready_status;
+extern uint8_t g_ready_status;
+extern char g_ble_mac[];
+extern char g_sta_mac[];
 
 static int32_t at_uart_write_data(uint8_t *data, int32_t len)
 {
+    char *at_match;
     uint32_t length = 0;
-    if (ready_status == 1) {
+    if (g_ready_status == 0) {
+        at_match = strstr((char*)data, "+BLEADDR");
+        if (at_match) {
+            memcpy(g_ble_mac, at_match, 28);
+        }
+        at_match = strstr((char*)data, "+CIPSTAMAC");
+        if (at_match) {
+            memcpy(g_sta_mac, at_match, 30);
+        }
+    } else if (g_ready_status == 1) {
        length = uart_write_bytes(g_at_cmd_port, (char *)data, len);     
     }
     return length;
