@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "sdkconfig.h"
 
 #ifdef CONFIG_AT_BASE_ON_UART
@@ -43,11 +44,15 @@ static int32_t at_uart_write_data(uint8_t *data, int32_t len)
     if (g_ready_status == 0) {
         at_match = strstr((char*)data, "+BLEADDR");
         if (at_match) {
-            memcpy(g_ble_mac, at_match, 28);
+            for (uint8_t i = 0; i < 28; i++) {
+                g_ble_mac[i] = toupper(at_match[i]);
+            }
         }
         at_match = strstr((char*)data, "+CIPSTAMAC");
         if (at_match) {
-            memcpy(g_sta_mac, at_match, 30);
+            for (uint8_t i = 0; i < 30; i++) {
+                g_sta_mac[i] = toupper(at_match[i]);
+            }
         }
     } else if (g_ready_status == 1) {
        length = uart_write_bytes(g_at_cmd_port, (char *)data, len);     
