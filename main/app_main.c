@@ -26,7 +26,7 @@ static void sntp_sync_cb(struct timeval *tv)
                        "\r\n+SYSTIMESTAMP::%lld\r\n",
                        (long long)tv->tv_sec);
     if (len > 0 && len < sizeof(buf)) {
-        at_port_write((uint8_t *)buf, (uint16_t)len);
+        uart_write_bytes(UART_NUM_1, (char *)buf, len);
     }
 }
 
