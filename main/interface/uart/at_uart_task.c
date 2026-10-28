@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include <ctype.h>
 #include "sdkconfig.h"
 
@@ -37,6 +38,8 @@ extern uint8_t g_ready_status;
 extern char g_ble_mac[];
 extern char g_sta_mac[];
 
+char time_updated[] = "+TIME_UPDATED:1793156127\r\n"
+
 static int32_t at_uart_write_data(uint8_t *data, int32_t len)
 {
     char *at_match;
@@ -55,7 +58,12 @@ static int32_t at_uart_write_data(uint8_t *data, int32_t len)
             }
         }
     } else if (g_ready_status == 1) {
-       length = uart_write_bytes(g_at_cmd_port, (char *)data, len);     
+        if (strstr((char *)data, "+TIME_UPDATED")) {
+            sprintf(time_updated, "+TIME_UPDATED:%d\r\n", time(NULL));
+            length = uart_write_bytes(g_at_cmd_port, time_updated, strlen(time_updated));    
+        } else {
+            length = uart_write_bytes(g_at_cmd_port, (char *)data, len);
+        }    
     }
     return length;
 }
