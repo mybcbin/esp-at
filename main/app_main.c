@@ -10,6 +10,21 @@
 #include "esp_at.h"
 #include "esp_at_init.h"
 
+static void sntp_sync_cb(struct timeval *tv)
+{
+    if (tv == NULL || tv->tv_sec < 1609459200) {
+        return; // 过滤 1970 初始时间
+    }
+
+    char buf[64];
+    int len = snprintf(buf, sizeof(buf),
+                       "\r\n+SYSTIMESTAMP::%lld\r\n",
+                       (long long)tv->tv_sec);
+    if (len > 0 && len < sizeof(buf)) {
+        at_port_write((uint8_t *)buf, (uint16_t)len);
+    }
+}
+
 void app_main(void)
 {
     esp_at_main_preprocess();
@@ -17,6 +32,8 @@ void app_main(void)
     ESP_ERROR_CHECK(nvs_flash_init());
     ESP_ERROR_CHECK(esp_at_netif_init());
     ESP_ERROR_CHECK(esp_event_loop_create_default());
+
+    esp_sntp_set_time_sync_notification_cb(sntp_sync_cb);
 
     esp_at_init();
 }
