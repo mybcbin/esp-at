@@ -58,7 +58,7 @@ static int32_t at_uart_write_data(uint8_t *data, int32_t len)
             }
         }
     } else if (g_ready_status == 1) {
-        if ((len == 15) && memcmp(data, time_updated, 13)) {
+        if ((len == 15) && !memcmp(data, time_updated, 13)) {
             sprintf(&time_updated[14], "%d\r\n", time(NULL));
             length = uart_write_bytes(g_at_cmd_port, time_updated, 26);
         } else {
