@@ -10,6 +10,11 @@
 #include "esp_at.h"
 #include "esp_at_init.h"
 
+#include "esp_sntp.h"
+#include <time.h>
+#include <sys/time.h>
+#include "esp_at.h"   // 提供 at_port_write 声明
+
 static void sntp_sync_cb(struct timeval *tv)
 {
     if (tv == NULL || tv->tv_sec < 1609459200) {
