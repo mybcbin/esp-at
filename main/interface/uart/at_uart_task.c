@@ -38,7 +38,7 @@ extern uint8_t g_ready_status;
 extern char g_ble_mac[];
 extern char g_sta_mac[];
 
-char time_updated[] = "+TIME_UPDATED:1793156127\r\n"
+char time_updated[] = "+TIME_UPDATED:1793156127\r\n";
 
 static int32_t at_uart_write_data(uint8_t *data, int32_t len)
 {
