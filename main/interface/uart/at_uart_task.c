@@ -96,7 +96,14 @@ static int32_t at_uart_read_data(uint8_t *buffer, int32_t len)
             return -1;
         }
     } else {
-        return uart_read_bytes(g_at_cmd_port, buffer, len, portTICK_PERIOD_MS);
+        len = uart_read_bytes(g_at_cmd_port, buffer, len, portTICK_PERIOD_MS);
+        buffer[len] = 0;
+        char *match = strstr(buffer, "\"ts\":0123456789");
+        if (match) {
+            sprintf(match, "\"ts\":%d", time(NULL));
+            *(match + 15) = ',';    
+        }
+        return len;
     }
 }
 
